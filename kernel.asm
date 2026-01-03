@@ -1,6 +1,7 @@
 ; Минимальное ядро ОС с консолью
 ; Компиляция: nasm -f bin kernel.asm -o kernel.bin
 ; Загрузка: поместить kernel.bin в первый сектор диска (или использовать загрузчик)
+%include "disk.asm"
 
 org 0x7C00  ; Стандартное смещение загрузчика BIOS
 
@@ -215,4 +216,8 @@ process_command:
 
 ; Данные
 cmd_calc db "calc ", 0
-%include "disk.asm"
+call load_kernel
+mov bx, KERNEL_OFFSET
+mov dh, 2
+mov dl, [BOOT_DRIVE]
+call disk_load
