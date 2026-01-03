@@ -215,3 +215,4 @@ process_command:
 
 ; Данные
 cmd_calc db "calc ", 0
+%include "disk.asm"
