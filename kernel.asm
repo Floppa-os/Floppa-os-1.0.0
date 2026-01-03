@@ -177,3 +177,41 @@ new_line:
     mov ah, 0x0E
     int 0x10
     ret
+
+console_loop:
+    call get_char
+    mov byte [input_buf + bx], al
+    inc bx
+
+    mov ah, 0x0E
+    mov bh, 0
+    mov bl, 0x07
+    int 0x10
+
+    cmp al, 0x0D  ; Enter
+    je process_command
+    jmp console_loop
+
+process_command:
+    mov byte [input_buf + bx], 0
+    call new_line
+
+    ; Проверяем команду calc
+    mov si, input_buf
+    mov di, cmd_calc
+    call compare_string
+    jc .is_calc
+
+    ; Остальные команды (help, echo и т. д.)
+    ...
+
+.is_calc:
+    ; Вызываем калькулятор на C++
+    mov si, input_buf + 5  ; Пропускаем "calc "
+    call calculator  ; Вызов функции из calculator.cpp
+    jmp reset_buffer
+
+...
+
+; Данные
+cmd_calc db "calc ", 0
