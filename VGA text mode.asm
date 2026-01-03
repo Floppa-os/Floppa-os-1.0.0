@@ -1,13 +1,11 @@
-; Вывести символ в текстовом режиме
 putchar:
     pusha
     mov di, [cursor_pos]
-    mov word [0xB8000 + di*2], ax ; ax = символ + атрибут
+    mov word [0xB8000 + di*2], ax  ; ax = символ + атрибут
     inc word [cursor_pos]
     popa
     ret
 
-; Установить позицию курсора
 set_cursor:
     pusha
     mov dx, 0x3D4
