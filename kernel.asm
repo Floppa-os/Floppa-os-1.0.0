@@ -150,3 +150,30 @@ input_buf times 256 db 0  ; Буфер ввода
 ; Заполнитель до 512 байт (размер сектора)
 times 510-($-$$) db 0
 dw 0xAA55  ; Сигнатура загрузчика
+
+; extern "C" функции для C++
+print_string:
+    lodsb
+    or al, al
+    jz .done
+    mov ah, 0x0E
+    mov bh, 0
+    mov bl, 0x07
+    int 0x10
+    jmp print_string
+.done:
+    ret
+
+get_char:
+    mov ah, 0x00
+    int 0x16
+    ret
+
+new_line:
+    mov al, 0x0D
+    mov ah, 0x0E
+    int 0x10
+    mov al, 0x0A
+    mov ah, 0x0E
+    int 0x10
+    ret
